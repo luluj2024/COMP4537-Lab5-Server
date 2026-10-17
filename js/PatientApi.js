@@ -40,7 +40,12 @@ export class PatientApi {
         return this.respond(res, 200, await this.database.select(sql));
       }
       return this.respond(res, 405, { error: MESSAGES.method }, { Allow: 'GET, POST, OPTIONS' });
-    } catch {
+    } catch (error) {
+      console.error('Database request failed', {
+        code: error.code,
+        errno: error.errno,
+        sqlState: error.sqlState
+      });
       return this.respond(res, 400, { error: MESSAGES.failed });
     }
   }
